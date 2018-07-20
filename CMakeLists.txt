@@ -10,6 +10,6 @@ HunterGate(
   SHA1 "66b28c3e88dd81833851181149df1075c62e8790"
 )
 
-project(libigl)
+project(libigl CXX)
 
 include(${CMAKE_CURRENT_LIST_DIR}/optional/CMakeLists.txt)
