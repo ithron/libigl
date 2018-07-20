@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.2)
 
 option(HUNTER_ENABLED "Enable Hunter package manager" OFF)
 include(${CMAKE_CURRENT_LIST_DIR}/shared/cmake/HunterGate.cmake)
