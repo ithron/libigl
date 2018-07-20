@@ -22,9 +22,13 @@ endif()
 #
 # COMPONENTS should match subsequent calls
 find_package(CGAL COMPONENTS Core) # --> CGAL_FOUND
-find_package(Boost 1.48 COMPONENTS thread system) # --> BOOST_FOUND
-if(CGAL_FOUND AND BOOST_FOUND)
+if (HUNTER_ENABLED AND CGAL_FOUND)
   set(CGAL_AND_BOOST_FOUND TRUE)
+else()
+  find_package(Boost 1.48 COMPONENTS thread system) # --> BOOST_FOUND
+  if(CGAL_FOUND AND BOOST_FOUND)
+    set(CGAL_AND_BOOST_FOUND TRUE)
+  endif()
 endif()
 find_package(Matlab COMPONENTS MEX_COMPILER MX_LIBRARY ENG_LIBRARY) # --> Matlab_FOUND
 find_package(MOSEK) # --> MOSEK_FOUND
@@ -55,6 +59,11 @@ if(LIBIGL_WITH_VIEWER AND (NOT LIBIGL_WITH_OPENGL_GLFW OR NOT LIBIGL_WITH_OPENGL
 endif()
 
 ################################################################################
+
+if (HUNTER_ENABLED AND LIBIGL_WITH_CGAL)
+  hunter_add_package(Boost COMPONENTS thread system)
+  find_package(Boost 1.48 CONFIG COMPONENTS thread system) # --> BOOST_FOUND
+endif()
 
 ### Configuration
 set(LIBIGL_ROOT "${CMAKE_CURRENT_LIST_DIR}/../..")
@@ -106,15 +115,21 @@ if(TARGET Eigen3::Eigen)
   # If an imported target already exists, use it
   target_link_libraries(igl_common INTERFACE Eigen3::Eigen)
 else()
-  target_include_directories(igl_common SYSTEM INTERFACE 
-    $<BUILD_INTERFACE:${LIBIGL_EXTERNAL}/eigen>
-    $<INSTALL_INTERFACE:include>
-  )
-  # need to install eigen headers
-  install(
-    DIRECTORY ${LIBIGL_EXTERNAL}/eigen/Eigen
-    DESTINATION include
-  )
+  if (HUNTER_ENABLED)
+    hunter_add_package(Eigen)
+    find_package(Eigen3 CONFIG REQUIRED)
+    target_link_libraries(igl_common INTERFACE Eigen3::Eigen)
+  else()
+    target_include_directories(igl_common SYSTEM INTERFACE 
+      $<BUILD_INTERFACE:${LIBIGL_EXTERNAL}/eigen>
+      $<INSTALL_INTERFACE:include>
+    )
+    # need to install eigen headers
+    install(
+      DIRECTORY ${LIBIGL_EXTERNAL}/eigen/Eigen
+      DESTINATION include
+    )
+  endif()
 endif()
 
 # C++11 Thread library
