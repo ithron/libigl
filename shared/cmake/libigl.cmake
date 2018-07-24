@@ -86,6 +86,7 @@ target_include_directories(igl_common SYSTEM INTERFACE
   $<BUILD_INTERFACE:${LIBIGL_SOURCE_DIR}>
   $<INSTALL_INTERFACE:include>
 )
+set_property(TARGET igl_common PROPERTY EXPORT_NAME common)
 if(LIBIGL_USE_STATIC_LIBRARY)
   target_compile_definitions(igl_common INTERFACE -DIGL_STATIC_LIBRARY)
 endif()
@@ -162,6 +163,7 @@ function(compile_igl_module module_dir)
   # Alias target because it looks nicer
   message(STATUS "Creating target: igl::${module_name} (${module_libname})")
   add_library(igl::${module_name} ALIAS ${module_libname})
+  set_property(TARGET ${module_libname} PROPERTY EXPORT_NAME ${module_name})
 endfunction()
 
 
