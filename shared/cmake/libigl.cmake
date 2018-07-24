@@ -124,11 +124,6 @@ else()
       $<BUILD_INTERFACE:${LIBIGL_EXTERNAL}/eigen>
       $<INSTALL_INTERFACE:include>
     )
-    # need to install eigen headers
-    install(
-      DIRECTORY ${LIBIGL_EXTERNAL}/eigen/Eigen
-      DESTINATION include
-    )
   endif()
 endif()
 
