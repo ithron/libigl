@@ -518,12 +518,12 @@ configure_package_config_file(
 )
 
 export(EXPORT igl-export
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/libigl-exports.cmake"
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/libigl-export.cmake"
   NAMESPACE igl::
 )
 
 export(TARGETS ${LIBIGL_ALL_MODULES} NAMESPACE igl:: FILE libigl-export.cmake)
-install(EXPORT igl-export DESTINATION ${CMAKE_INSTALL_DATADIR}/libigl/cmake FILE "libigl-exports.cmake")
+install(EXPORT igl-export DESTINATION ${CMAKE_INSTALL_DATADIR}/libigl/cmake FILE "libigl-export.cmake")
 
 install(
   FILES
