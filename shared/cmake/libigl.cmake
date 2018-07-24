@@ -486,6 +486,10 @@ endif()
 
 include(GNUInstallDirs)
 
+set_property(TARGET igl PROPERTY VERSION ${libigl_VERSION})
+set_property(TARGET igl PROPERTY SOVERSION 1)
+set_property(TARGET igl PROPERTY INTERFACE_libigl_MAJOR_VERSION 1)
+
 install(TARGETS ${LIBIGL_ALL_MODULES} EXPORT igl-export
    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -501,20 +505,37 @@ foreach(HEADERS ${LIBIGL_INSTALL_HEADERS})
   )
 endforeach(HEADERS)
 
-install(EXPORT igl-export NAMESPACE igl::
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/igl/cmake
-)
-export(TARGETS ${LIBIGL_ALL_MODULES} NAMESPACE igl:: FILE igl-export.cmake)
+include(CMakePackageConfigHelpers)
 
 # Write and install package configuration file
-include(CMakePackageConfigHelpers)
+set(libigl_VERSION 1.2.1)
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/libigl-config-version.cmake"
+  VERSION ${libigl_VERSION}
+  COMPATIBILITY AnyNewerVersion
+)
 configure_package_config_file(
   ${CMAKE_CURRENT_LIST_DIR}/libigl-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/libigl-config.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/igl/cmake
-)
-install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/libigl-config.cmake
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/igl/cmake
+  ${CMAKE_BINARY_DIR}/libigl-config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/libigl/cmake
 )
 
+export(EXPORT igl-export
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/libigl-exports.cmake"
+  NAMESPACE igl::
+)
+
+export(TARGETS ${LIBIGL_ALL_MODULES} NAMESPACE igl:: FILE libigl-export.cmake)
+install(EXPORT igl-export DESTINATION ${CMAKE_INSTALL_DATADIR}/libigl/cmake FILE "libigl-exports.cmake")
+
+install(
+  FILES
+    ${CMAKE_BINARY_DIR}/libigl-config.cmake
+    ${CMAKE_BINARY_DIR}/libigl-config-version.cmake
+  DESTINATION
+    ${CMAKE_INSTALL_DATADIR}/libigl/cmake
+)
+
+
+export(PACKAGE libigl)
