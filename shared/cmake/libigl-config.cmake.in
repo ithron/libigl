@@ -1,4 +1,5 @@
 @PACKAGE_INIT@
 
-include(${CMAKE_CURRENT_LIST_DIR}/igl-export.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/libigl-export.cmake)
 
+check_required_components(libigl)
