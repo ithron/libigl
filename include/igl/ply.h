@@ -1119,7 +1119,10 @@ inline PlyFile *ply_read(FILE *fp, int *nelems, char ***elem_names)
 
   /* set return values about the elements */
 
-  elist = (char **) myalloc (sizeof (char *) * plyfile->nelems);
+  if (plyfile->nelems > 0)
+    elist = (char **) myalloc (sizeof (char *) * plyfile->nelems);
+  else
+    elist = NULL;
   for (i = 0; i < plyfile->nelems; i++)
     elist[i] = strdup (plyfile->elems[i]->name);
 
