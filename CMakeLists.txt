@@ -6,8 +6,8 @@ option(HUNTER_ENABLED "Enable Hunter package manager" OFF)
 include(HunterGate)
 
 HunterGate(
-  URL "https://github.com/ruslo/hunter/archive/v0.22.36.tar.gz"
-  SHA1 "66b28c3e88dd81833851181149df1075c62e8790"
+  URL "https://github.com/ruslo/hunter/archive/v0.23.121.tar.gz"
+  SHA1 "a97db2dac365d2864af3299f670a96dff4570d91"
 )
 
 project(libigl CXX)
